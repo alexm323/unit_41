@@ -1,0 +1,109 @@
+Server vs Client Routing
+_________________________________________________________________
+react router is a library that lets us implement client side routing 
+
+basic goals 
+1. what is client side routing and why its useful
+2. compare client side routing to server side routing
+3. implement basic client-side routing with React Router 
+
+server-side routing 
+traditionally we send a request to a server/url and we are asking for some path or whatever the url is 
+that server receives the request, parses it, and replaces the screen with that new content 
+
+its kind of like a stage where its the same stage but something is happening to make the stage different 
+
+this makes the websites a whole lot more usable 
+
+we are going to make a janky version so we can see why we might want to use a library like react router 
+
+_________________________________________________________________
+Janky Client Side Routing
+_________________________________________________________________
+lets make a version of the client side routing without the library first 
+
+we are basically manipulating the dom to show us only data for the particular page that we want to show 
+
+this is generally not a good solution because we lose access to saving that particular url and we can not use back and forward functionality 
+
+react router solves this issue for us 
+_________________________________________________________________
+Defining Routes
+_________________________________________________________________
+we can add in real client side routing 
+
+there are a couple of different routing libraries that are popular and we are going to be using react router 
+
+sites that exclusively use client-side routing are single page applications 
+we can use client side routing to do this 
+
+it uses the History api in the browser to do this 
+
+reacttraining.com/react-router
+
+there are 2 versions, web and native 
+
+npm install react-router-dom
+
+we need to install it and import it 
+
+specifically we want to import 
+
+import {BrowserRouter,Route} from "react-router-dom";
+
+wrap the things that need routing with Browser Router 
+
+for example we might have a navbar that we want to keep the same on every 'page' 
+
+BrowserRouter makes it so we keep in sync with the url 
+
+there are others
+
+memoryrouter keeps a history of the url in memory but does not replace the page useful for testing 
+
+inside of our browserrouter we have our different props we can pass in to our routes 
+
+Route component acts as a translater between routes and components 
+
+exact tells that route component whether or not the path needs to match exactly 
+
+path prop specifies which path we are trying to match 
+
+if we remove the exact prop then unlike the other routing things we have used if multiple routes match it will render all of them 
+
+we usually dont want that but there are times where it can be useful 
+
+
+
+_________________________________________________________________
+Router Links
+_________________________________________________________________
+lets add in some links so we can travel around the routes 
+
+we dont add in an anchor tag but we use a <Link> component from the react-router-dom library 
+
+it creates what looks like an anchor tag but there is some extra js on the back 
+
+works just like a link but it wont refresh the page 
+
+<Link> does not send a GET request the JS intercepts it and shows us what we are looking for. 
+
+if we put the links inside of a route component then it will only render on that component 
+
+
+_________________________________________________________________
+NavLinks
+_________________________________________________________________
+it does the same thing as link for the most part 
+
+<NavLink> is going to add a class of active to whichever nav link is currently active 
+
+so if we were on a certain page something could be hilighted to show us exactly which link is active at this time 
+
+we can also add in the exact prop to the navlink so we can match only the active one 
+
+
+_________________________________________________________________
+React Router Intro Exercise
+_________________________________________________________________
+
