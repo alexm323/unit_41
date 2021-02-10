@@ -1,0 +1,245 @@
+URL params
+____________________________________________________
+1. describe how params work
+2. understand Switch and when to use/not use it
+3. compare different ways to redirtect in REact router
+4. Learn how to test React Router components
+
+we have an app that i got from the demo code
+
+takes the data from the giphy api and it fetches a gif for us
+
+we want the route path to be for a certain food and we pass in that param 
+
+we dont want to do what we have seen so far to write each route manually 
+
+with what we know so far we would have to write a route for each food and think of every kind of food a person might come up with which is obviously less than  ideal 
+
+we can indivate a variable with a colon 
+
+Route path="/foods/:food"
+
+but how do we get access to the name inside the component?
+
+we use a hook
+
+useParams 
+        <Route path="/food/sushi">
+          <Food />
+        </Route>
+returns an object
+the key is the name 
+the value will be sushi
+
+import { useParams } from "react-router-dom";
+const { name } = useParams();
+
+and we get this we import it into our food component 
+we then extract the name from useParams which is the variable url we are using 
+
+and then we can just use name in our component 
+
+we are not passing in the prop of the param into the component but we are calling useParams() instead inside of the component where we are loading that route 
+
+we can also have multiple params 
+
+        <Route path="/food/sushi/drink/pepsi">
+          <Food />
+        </Route>
+
+then when we use useParams inside of our Food component we will see that we now get an object that has two keys 
+
+and thats how we can get dynamic variable paths 
+
+____________________________________________________
+Switch Component
+____________________________________________________
+We are going to talk about the Switch component 
+
+added in the demo code for this video too there is just a bunch of blog stuff so he can show the switch component 
+
+the problem we are having is that we are matching multiple paths so multiple of the blog components are being rendered 
+
+/blog/new
+also matches this pattern 
+/blog/:slug 
+
+so they are both beiung rended so that is not going to work for us 
+
+if we want exclusive routing we can use a Switch component 
+
+we get it from the react-router library and so we wrap our routes in the Switch component  
+
+    <Switch>
+      <Route exact path="/about"><About /></Route>
+      <Route exact path="/contact"><Contact /></Route>
+      <Route exact path="/blog/:slug"><Post /></Route>
+      <Route exact path="/blog"><BlogHome /></Route>
+      <Route exact path="/"><Home /></Route>
+      <Redirect to="/" />
+    </Switch>
+
+only the first matching route that matches will be rendered, just like node js and python flask
+
+and now if we go to new post it only shows one 
+
+but the order matters 
+
+depending on the app it isnt bad to be matching multiple routes matching 
+
+the order matters and if you have anything that may conflict that may be more specific like we have then for blog/new then we want to put that above the blog/:slug 
+
+
+____________________________________________________
+Not found route 
+____________________________________________________
+
+What happens when no route is matched 
+
+
+we have a broken link that does not match a route pattern 
+if we want to set up a fake 404 template then all we need to do is add a route at the bottom of the switch 
+
+<Route><NotFOund /> </Route>
+
+and we can render some not found component 
+
+we need to use a switch 
+
+if we put it at the beginning it is only going to give us the not found component because it will be matched 
+
+if we didnt use the switch we would see it on every page as it would be rendered on everything 
+
+____________________________________________________
+Redirect Component
+____________________________________________________
+
+now lets talk about redirecting 
+
+like if someone tries to go somewhere that doesnt exist then maybe we want to redirect just back to the route 
+
+these are not true redirects, it is all happening on the client side 
+
+it is mimicking the behavior 
+
+you want to redirect them to the different route 
+
+we can use the redirect component 
+
+usefuyl for "you shouldnt have gotten here, go here instead"
+
+calling  .push method on the history object 
+-useful for you finished now go here 
+
+<Redirect to="/" />
+
+so we can replace the 404 with this 
+and it will take us to wahtever route we are specifying 
+
+<Redirect to="/about" />
+
+will take us to about page 
+
+it is a catch all just like the Not found 
+
+but this will take us somewhere else we are rendering to 
+
+import React from 'react';
+import {Redirect} from 'react-router-dom';
+
+const AdminDashboard = () => {
+    const isAdmin = Math.random() < 0.5;
+    return isAdmin ? <h1>Welcome Admin!!!</h1> : <Redirect to='/' />
+}
+
+export default AdminDashboard;
+
+this is just going to redirect as soon as it renders this is not really the way we would want to use a redirect to protect a route 
+
+that comes next using the history Object 
+
+____________________________________________________
+useHistory 
+____________________________________________________
+
+we can use the history Object to redirect 
+
+window.history in the console lets us see some stuff
+
+but we wont manipulate it directly we are going to use  ahook 
+
+useHistory hook
+the object has a .push(url) which adds URL to the session history
+
+unlike <redirect> , hitting the back button will return here 
+
+redirect is a component that we render , but push is a message that we use on a js object that we get by using useHistory Hook 
+
+const history = useHistory();
+import {useHistory} from 'react-router-dom';
+
+we then get access to that history object 
+
+usually we would do this in a form submission or somewhere else that requires a redirect 
+
+history.push("/");
+
+so we use that and then we are back at home 
+
+and we can go back
+
+with redirects that would not work 
+
+so that click on admin dashboard that redirects us randomly is not something we can go back to 
+
+primarily we use the push method
+
+____________________________________________________
+testing react router components
+____________________________________________________
+
+a little more difficult 
+
+we need to mock some hooks sometimes 
+
+so if we want to test our Nav component 
+which is currently rendering a bunch of links 
+
+we run into a problem where we cant use Link components outside of routers 
+
+it needs to be inside of a router so we can use a Memory Router 
+which is a version of browser router which doesnt actually need a browser 
+
+it('renders without crashing', () => {
+  render(
+    <MemoryRouter>
+      <Nav />
+    </MemoryRouter>
+  );
+});
+
+so we get this 
+
+if we want to actually test the logic of our routes 
+
+we could write some ttests using the same memory routers 
+
+but if we want to test the logic using memory router then we need to move our browserrouter that is already on our components to index.js which is our topmost file 
+
+test('renders App', () => {
+    render((
+        <MemoryRouter initialEntries={['/about']}>
+            <App/>
+        </MemoryRouter>
+    ));
+});
+
+we write this test and the initialEntries prop tells us what 'page' we want to be rendering 
+
+so we are testing that the right component is being rendered
+
+we can still do all the fireevent stuff 
+
+
+
+
