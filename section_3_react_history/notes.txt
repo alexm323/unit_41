@@ -1,0 +1,295 @@
+Class Components Intro
+_______________________________________
+time to go back in time and discuss react over the years 
+
+we are learning react with hooks, the fanciest and newest way to write 
+
+explore the history of reacts evolution
+
+build class based Components
+define the component lifecycle for class Components
+describe the problems that hooks were created to solve 
+
+get even more excited about hooks 
+
+
+
+import './App.css';
+import Counter from './Counter'
+function App() {
+  return (
+    <div className="App">
+      <Counter/>
+    </div>
+  );
+}
+
+export default App;
+
+
+if we want to access props we have to pass them into the component and then in the class
+we have to use a constructor and acces this.props 
+in order for that to work we need to use super(props)
+
+import React from 'react';
+
+class Counter extends React.Component {
+    constructor(props){
+        // refers to react.Component
+        super(props);
+        console.log(this.props)
+    }
+    render(){
+        return(
+            <div>
+                <h1 style={{color:this.props.color}}>I am a counter</h1>
+            </div>
+        )
+    }
+}
+
+export default Counter;
+
+import './App.css';
+import Counter from './Counter'
+function App() {
+  return (
+    <div className="App">
+      <Counter color={"red"} initialValue={10}/>
+    </div>
+  );
+}
+
+export default App;
+
+added into the constructor
+
+this.state = {count:0,isHiding:false}
+<h3>Count is: {this.state.count}</h3>
+
+
+what about changing the state?
+
+
+
+_______________________________________
+State in Class Components 
+_______________________________________
+
+state is initialized in the constructor 
+
+we set this.state
+
+class Counter extends React.Component {
+    constructor(props){
+        // refers to react.Component
+        super(props);
+        this.state = {count:0,isHiding:false}
+
+    }
+    render(){
+        const {color}= this.props.color;
+        const {count} = this.state;
+        return(
+            <div>
+                <h1 style={{color}}>I am a counter</h1>
+                <h3>Count is: {count}</h3>
+                <button onClick={() => this.setState({count:count +1})}>Add 1</button>
+                <button onClick={() => this.setState({count:count - 1})}>Subtract 1</button>
+            </div>
+        )
+    }
+}
+
+_______________________________________
+Classes and Binding
+_______________________________________
+
+we run into issues if we try to move methods outside of arrow functions 
+
+we have to create instance methods to access these things 
+
+we get an error when we do that though if we have it written as such 
+
+class Counter extends React.Component {
+    constructor(props){
+        // refers to react.Component
+        super(props);
+        this.state = {count:0,isHiding:false}
+
+    }
+    increment(){
+        this.setState({count:this.state.count+1})
+    }
+    decrement(){
+        this.setState({count:this.state.count-1})
+    }
+    render(){
+        const {color}= this.props.color;
+        return(
+            <div>
+                <h1 style={{color}}>I am a counter</h1>
+                <h3>Count is: {this.state.count}</h3>
+                <button onClick={this.increment}>Add 1</button>
+                <button onClick={this.decrement}>Subtract 1</button>
+            </div>
+        )
+    }
+}
+
+
+because we lose the context of 'this' 
+
+
+the way we solve this is by binding the method to the constructor 
+
+it is a lot of code to write some initial state 
+
+we dont have to do a lot of this stuff in hooks 
+
+you have to really understand bind and this 
+
+there is newer syntax where we write an arrow function and without the constructor
+
+
+_______________________________________
+Component Lifecycle
+_______________________________________
+there are methods that we can use at certain times that are rendered
+
+we useEffect these things in functional components 
+
+construtor runs when the component first tries to mount 
+
+render renders the component 
+
+componentDidMount runs after the first render onlu great for fetching data
+
+componentDidUpdate - runs after the component is updated does nmot run after the first render good place to optiona;y gfeatch data syunc to localStorage etxc 
+
+componentWillUnmount - runs when we are closing connections and stuff like that 
+
+we cannot use functional components with this 
+
+useEffect takes the place of all that 
+
+there are some shortcomings though
+
+
+
+
+_______________________________________
+Challenges with Class Components
+_______________________________________
+we used to make Classes
+
+defining state as an instance property or in the constructor 
+
+defining default props 
+
+
+static defaultProps = {color:'orange'};
+
+we add this in to our class to add in a default Prop 
+
+have to use the keywords this and the bind 
+
+newer featrure to js made thi a bit trickier 
+
+common problems 
+-often repeat code in lifecycle methods 
+everytime something changes in a todo we want to make an axios request 
+
+to cover different situations 
+
+in hook based components we can use useEffect to handle multiple scenarios 
+
+makes it difficultto share functionality between compoents 
+
+how would we share things if we are using this and it has to be bound 
+
+
+
+_______________________________________
+Mixins
+_______________________________________
+mixins was a feature that let you use new components to include other functions and stuff 
+
+we used to use something called get initialState method 
+
+they are using different pieces of state its just that the state is called by the same name 
+
+this was one of the first approaches to allow to be able to share things between components but you would have no options to name functions specifically for their use situation and it was difficult to debug and sometimes there were dependencies that relied on a mixin and vice versa
+_______________________________________
+Higher Order Components
+_______________________________________
+
+react owners disowned mxins at some point 
+
+higher order components were another option for sharing code between components 
+
+soo we would make a function that accepts a react component as an argument and then we use that to make a new component 
+
+the solution here is that just like when we use the spread operator you return that new component with extra stuff in it namely new props that we get access to if we wanted to do something like count emojis instead of just a number then we can pass functionality down plus more 
+
+
+_______________________________________
+Render Props
+_______________________________________
+combining multiple Higher order components can be difficult and confusing 
+
+they are not very customizable once we define them 
+
+render props is yuet another solution 
+
+pass in one giant prop that we typically call render 
+
+and we define and render a lot fot he things that we are going to want to be able to do in our bottom component 
+
+hooks were invented to solve all of these problems 
+
+_______________________________________
+Hooks to the rescue
+_______________________________________
+functional components have been around for a while but they were dumb stateless components 
+
+functional components made it pretty easy to render lots of comp-onents 
+
+hooks were added in about 2019
+
+most resources are class based on the official docs 
+
+over the next couple of years they will be very popular 
+
+we dont have lifecycle methods but we have ways of running code using useEffect 
+
+they do not work inside of class components at all
+
+hooks are really a much nicer syntax, easier to use and jsut nicer to look at in general
+
+we can make custom hooks to share logic easily between components too 
+
+really the superior method 
+
+_______________________________________
+Hooks and Closures
+_______________________________________
+
+Closures
+
+how hooks work 
+
+things like useRef and useState how does information persit
+
+when we talk about interview stuff we will talk more about closures 
+
+an inner function is able to remember variables in outer functions 
+
+instead of return a function that we execute 
+
+we return a function itself 
+
+the concept of closure means we will have access to closure because we just have to save and execute that varaible 
+
+look into this more later because it is pretty weird but it is definitely the same pattern for useState and thats basically what it is , really interesting look behind the curtain 
+
