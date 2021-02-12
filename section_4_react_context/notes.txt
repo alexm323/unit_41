@@ -1,0 +1,74 @@
+Prop Drilling
+___________________________________________________
+There is a newer api called React Context 
+
+THere is a pain point 
+
+explain what context is 
+how to sue the context api to provide and consume context
+
+passing data down from the parent to the child to the grandchild 
+
+if it needs access to the top level component data it can be annoying that to share data we would need to pass it down all the way through
+
+-TodoApp - [{id:1, text:'walk the dog'}]
+    -TodoForm
+    -TodosList
+        -TodoItems
+
+so here if we wanted an li at the bottom level with the data from the top level component which has the state it would be difficult to access it in a more complicated app 
+
+
+___________________________________________________
+Consuming Context
+___________________________________________________
+lets us have universal context so we can access it and it allows us to pass data in certain portions of certain components 
+
+we create context 
+
+that makes a context object
+
+now we have to use the provider 
+
+then we wrap whatever we want inside of that context provider 
+
+every context provider accepts a value but we only pass in one thing and that can have as many things 
+
+the next piece though is that now we have to use useContext hook to explicitly access that context in our bottom component or wherever we want that data 
+
+only things nested within the provider are able to consume it 
+
+
+
+___________________________________________________
+Context Updating State
+___________________________________________________
+
+___________________________________________________
+Another Context Example
+___________________________________________________
+it looks pretty easy to use 
+
+we set a thing like 
+
+ThemeContext at the top level and we import stuff into the files we want to use them annd then we take advantage of something like 
+
+const color = useContext(ThemeContext)
+
+and then we get access to that color as long as the ThemeContext is wrapping the components that we are trying to nest 
+
+in this case the <Child/> Component 
+
+so now we can use our theme context to grab that data 
+
+we can use state and pass that through as well and we can do stuff like toggling or using state 
+
+remember that we can pass in all the components inbside of another one by using the children prop which is a prop we have access to that gives us any of the component stuff we pass downh that are nested 
+
+
+ 
+
+___________________________________________________
+Casino App Demo
+___________________________________________________
+
